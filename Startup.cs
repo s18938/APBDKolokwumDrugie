@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using APBDKolokwumDrugie.Models;
+using APBDKolokwumDrugie.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,7 @@ namespace APBDKolokwumDrugie
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddScoped<IDbService, SqlServerDbService>();
             services.AddDbContext<ProbneKolAPBD2Context>(options => {
 
                 options.UseSqlServer(@"Data Source=DESKTOP-5G2FL6J\SQLEXPRESS;Initial Catalog=ProbneKolAPBD2;Integrated Security=True");

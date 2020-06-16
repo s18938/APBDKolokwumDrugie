@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace APBDKolokwumDrugie.Services
 {
-    interface IDbService
+   public interface IDbService
     {
         public IEnumerable<Order> GetOrders();
         public IEnumerable<Order> GetOrders(string LastName);

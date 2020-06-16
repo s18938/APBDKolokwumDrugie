@@ -14,7 +14,7 @@ namespace APBDKolokwumDrugie.Controllers
     {
        
         private readonly IDbService _service;
-        public CustomersController( SqlServerDbService service)
+        public CustomersController( IDbService service)
         {
             
             _service = service;
