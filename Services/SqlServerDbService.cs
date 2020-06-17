@@ -1,4 +1,7 @@
-﻿using APBDKolokwumDrugie.Models;
+﻿using APBDKolokwumDrugie.DTOs.Reqests;
+using APBDKolokwumDrugie.DTOs.Response;
+using APBDKolokwumDrugie.Models;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,25 +24,45 @@ namespace APBDKolokwumDrugie.Services
 
         public IEnumerable<Order> GetOrders(string LastName)
         {
-            var ID = _context.Customer.Where(e => e.LastName.Equals(LastName)).FirstOrDefault().IdCustomer;
-            return _context.Order.ToList().Where(o => o.CustomerIdCustomer == ID);
+            
+                var ID = _context.Customer.Where(e => e.LastName.Equals(LastName)).FirstOrDefault().IdCustomer;
+            if (ID.Equals(null))
+            { 
+                throw new Exception("nie ma klienta o podanym nazwisku");
+            }
+
+            var Result = _context.Order.ToList().Where(o => o.CustomerIdCustomer == ID);
+            return Result;
+            
+           
         }
 
-        public void MakeOrder(int IdCustomer, Order Order)
+        public OrderResponse MakeOrder(int IdCustomer, OrderRequest Order)
         {
-            int NewIdOrder = _context.Order.Max(e => e.IdOrder + 1);
-            var z1 = new Order { DateIn = Order.DateIn, Comments = Order.Comments, CustomerIdCustomer = IdCustomer };
-            _context.Order.Add(z1);
+            try
+            {
+                int NewIdOrder = _context.Order.Max(e => e.IdOrder + 1);
+                var z1 = new Order { IdOrder = NewIdOrder, DateIn = Order.DateIn, DateOut = Order.DateOut, Comments = Order.Comments, CustomerIdCustomer = IdCustomer };
+                _context.Order.Add(z1);
 
-            /*     foreach (OrderCandy OrdCan in Order.OrderCandy)
-                 {
+                /*     foreach (OrderCandy OrdCan in Order.OrderCandy)
+                     {
 
-                     int NewIdCandy = _context.Candy.Where(e => e.IdCandy==OrdCan.CandyIdCandy).Select(e => e.IdCandy).First();
-                     var ResultOrderCandy = new OrderCandy { OrderIdOrder = NewIdOrder, CandyIdCandy = NewIdCandy, Quantity = OrdCan.Quantity, Comments = OrdCan.Comments };
-                     _context.OrderCandy.Add(ResultOrderCandy);
+                         int NewIdCandy = _context.Candy.Where(e => e.IdCandy==OrdCan.CandyIdCandy).Select(e => e.IdCandy).First();
+                         var ResultOrderCandy = new OrderCandy { OrderIdOrder = NewIdOrder, CandyIdCandy = NewIdCandy, Quantity = OrdCan.Quantity, Comments = OrdCan.Comments };
+                         _context.OrderCandy.Add(ResultOrderCandy);
 
-                 } */
-            _context.SaveChanges();
+                     } */
+                _context.SaveChanges();
+                return new OrderResponse { IdOrder = NewIdOrder, DateIn = Order.DateIn, DateOut = Order.DateOut, Comments = Order.Comments, CustomerIdCustomer = IdCustomer };
+            }
+            catch (SqlException e)
+            {
+                throw;
+            }
+            
         }
+
+        
     }
 }

@@ -1,4 +1,6 @@
-﻿using APBDKolokwumDrugie.Models;
+﻿using APBDKolokwumDrugie.DTOs.Reqests;
+using APBDKolokwumDrugie.DTOs.Response;
+using APBDKolokwumDrugie.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,6 @@ namespace APBDKolokwumDrugie.Services
     {
         public IEnumerable<Order> GetOrders();
         public IEnumerable<Order> GetOrders(string LastName);
-        public void MakeOrder(int IdCustomer, Order Order);
+        public OrderResponse MakeOrder(int IdCustomer, OrderRequest Order);
     }
 }

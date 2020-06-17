@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using APBDKolokwumDrugie.DTOs.Reqests;
 using APBDKolokwumDrugie.Models;
 using APBDKolokwumDrugie.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.IIS;
+using Microsoft.Data.SqlClient;
 
 namespace APBDKolokwumDrugie.Controllers
 {
@@ -20,17 +23,18 @@ namespace APBDKolokwumDrugie.Controllers
             _service = service;
         }
         [HttpPost("{IdCustomer}/orders")]
-        public IActionResult MakeOrder(int IdCustomer, [FromBody] Order Order)
+        public IActionResult MakeOrder(int IdCustomer, [FromBody] OrderRequest Order)
         {
             try
             {            
-                _service.MakeOrder(IdCustomer, Order);
-                return new OkResult();
+               
+                return  Ok(_service.MakeOrder(IdCustomer, Order));
             }
-            catch (Exception e)
+            catch (SqlException e)
             {
-                return new BadRequestResult();
+                return BadRequest();
             }
+          
         }
         }
 }

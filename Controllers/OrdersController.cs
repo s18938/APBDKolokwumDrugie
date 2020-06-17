@@ -20,15 +20,23 @@ namespace APBDKolokwumDrugie.Controllers
         }
 
         [HttpGet("{LastName}")]
-        public IActionResult GetOrders(string LastName)
-        {          
-            return Ok(_service.GetOrders(LastName));
+        public IActionResult GetOrders([FromRoute]string LastName)
+        {
+           
+            try
+            {
+                return Ok(_service.GetOrders(LastName));
+            }catch(Exception e)
+            {
+                return NotFound("nie ma zamówienia dla klienta o podanym nazwisku");
+            }
         }
 
         [HttpGet]
         public IActionResult GetOrders()
-        {           
+        {          
                 return Ok(_service.GetOrders());
+           
         }    
     }
 }
